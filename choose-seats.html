@@ -5,20 +5,14 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<style type="text/css">
-			.area {
-				margin-left: 50px;
-				margin-bottom: 50px;
-				max-width: 200px;
-				float: left;
-			}
-			
-			.area>button {
-				width: 18px;
-				height: 18px;
+			.btn {
+				width: 30px;
+				height: 30px;
 				display: inline-block;
 				box-sizing: border-box;
 				background: greenyellow;
-				margin-right: 2px;
+				margin-right: 4px;
+				margin-bottom: 4px;
 				font-size: 12px;
 				text-align: center;
 				outline: none;
@@ -26,47 +20,49 @@
 				cursor: pointer;
 			}
 			
-			.area>button:nth-child(10) {
-				margin-right: 0;
-			}
-			button.choose{
+			.btn.choose {
 				background: skyblue;
 			}
 		</style>
 	</head>
 
 	<body>
-		<div id="seats-box"></div>
-		<script src="jquery-1.12.4.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			var seats = {
-				init: function(num) {
-					var that = this;
-					that.setDraw(num);
-					that.chooseSeats();
-				},
-				setDraw: function(seatsNum) {
-					var that = this;
-					var areaNum = Math.floor(seatsNum / 100);
-					for(let j = areaNum; j > 0; j--) {
-						setTimeout(function() {
-							$("#seats-box").append('<div class=\"area area' + (areaNum - j) + '\"></div>');
-							for(let i = 0; i < 100; i++) {
-								$("#seats-box").find('.area').eq(areaNum - j).append("<button>" + i%10 + "</button>");
-							}
-						}, 100);
+			var timeChunk = function(arr, fn, count) {
+				var obj, t;
+				var len = arr.length;
+				var start = function() {
+					for(var i = 0; i < Math.min(count || 1, arr.length); i++) {
+						var obj = arr.shift();
+						fn(obj);
 					}
-				},
-				chooseSeats: function() {
-					$("#seats-box").on("click", "button", function() {
-						$(this).hasClass("choose") ? $(this).removeClass("choose") : $(this).addClass("choose");
-					});
+				};
+
+				return function() {
+					t = setInterval(function() {
+						if(ary.length === 0) { //如果全部节点都已经被创建好
+							return clearInterval(t);
+						}
+						start();
+					}, 200);
 				}
-				/*totalPrice:function(){
-					
-				}*/
+			}
+
+			var ary = [];
+			for(var i = 0; i < 900; i++) {
+				ary.push(i);
 			};
-			seats.init(900);
+
+			var renderFriendList = timeChunk(ary, function(n) {
+				var btn = document.createElement("button");
+				btn.innerHTML = n + 1;
+				btn.setAttribute("class", "btn")
+				document.body.appendChild(btn);
+			}, 8)
+
+			renderFriendList();
+			
+			
 		</script>
 	</body>
 
