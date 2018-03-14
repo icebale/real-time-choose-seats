@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.area {
+				margin-left: 50px;
+				margin-bottom: 50px;
+				max-width: 200px;
+				float: left;
+			}
+			
+			.area>button {
+				width: 18px;
+				height: 18px;
+				display: inline-block;
+				box-sizing: border-box;
+				background: greenyellow;
+				margin-right: 2px;
+				font-size: 12px;
+				text-align: center;
+				outline: none;
+				border: none;
+				cursor: pointer;
+			}
+			
+			.area>button:nth-child(10) {
+				margin-right: 0;
+			}
+			button.choose{
+				background: skyblue;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="seats-box"></div>
+		<script src="jquery-1.12.4.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var seats = {
+				init: function(num) {
+					var that = this;
+					that.setDraw(num);
+					that.chooseSeats();
+				},
+				setDraw: function(seatsNum) {
+					var that = this;
+					var areaNum = Math.floor(seatsNum / 100);
+					for(let j = areaNum; j > 0; j--) {
+						setTimeout(function() {
+							$("#seats-box").append('<div class=\"area area' + (areaNum - j) + '\"></div>');
+							for(let i = 0; i < 100; i++) {
+								$("#seats-box").find('.area').eq(areaNum - j).append("<button>" + i%10 + "</button>");
+							}
+						}, 100);
+					}
+				},
+				chooseSeats: function() {
+					$("#seats-box").on("click", "button", function() {
+						$(this).hasClass("choose") ? $(this).removeClass("choose") : $(this).addClass("choose");
+					});
+				}
+				/*totalPrice:function(){
+					
+				}*/
+			};
+			seats.init(900);
+		</script>
+	</body>
+
+</html>
